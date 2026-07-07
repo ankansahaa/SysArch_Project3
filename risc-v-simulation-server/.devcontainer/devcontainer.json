@@ -1,0 +1,33 @@
+{
+  "name": "Simulator Server (Play / Scala)",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "runArgs": [
+    "--network=devnet",
+    "--network-alias=server",
+    "--hostname=server"
+  ],
+  "forwardPorts": [
+    9000
+  ],
+  "portsAttributes": {
+    "9000": {
+      "label": "Play HTTP",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "sbt update",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "scala-lang.scala",
+        "scalameta.metals",
+        "dbaeumer.vscode-eslint"
+      ],
+      "settings": {
+        "editor.formatOnSave": true
+      }
+    }
+  }
+}

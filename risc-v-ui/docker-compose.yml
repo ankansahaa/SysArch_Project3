@@ -1,0 +1,10 @@
+services:
+  processor-ui:
+    build:
+      context: .
+      args:
+        VITE_SIMULATOR_BACKEND_URL: ${VITE_SIMULATOR_BACKEND_URL:-http://localhost:9000}
+        VITE_SIMULATOR_DEBUG: ${VITE_SIMULATOR_DEBUG:-false}
+    ports:
+      - "8080:80"
+    restart: unless-stopped

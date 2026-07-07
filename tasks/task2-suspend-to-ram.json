@@ -1,0 +1,26 @@
+{
+    "name": "Task 2: Suspend-to-RAM",
+    "id": "task2-suspend-to-ram",
+    "initial_pc": "0x0",
+    "os_program_file": "/programs/os/suspend_to_ram.s",
+    "user_programs": [
+        {
+            "name": "user_suspend_to_ram",
+            "file": "/programs/user_programs/user_suspend_to_ram.s",
+            "address": "0x4000000"
+        }
+    ],
+    "initial_memory": {},
+    "memory_mapped_registers": {
+        "mtime": "0xffff0000",
+        "mtimeh": "0xffff0004",
+        "mtimecmp": "0xffff0008",
+        "mtimecmph": "0xffff000c",
+        "keyboard_ready": "0xffff0010",
+        "keyboard_data": "0xffff0014",
+        "terminal_ready": "0xffff0018",
+        "terminal_data": "0xffff001c",
+        "display": "0xffff1000"
+    },
+    "terminal_delay": "3"
+}

@@ -1,0 +1,77 @@
+services:
+  risc-v-ui:
+    container_name: risc-v-ui
+    hostname: risc-v-ui
+    image: docker.io/gdnmhr/sysarch-riscv-ui:2026
+    # build:
+    #   context: ./risc-v-ui
+    #   args:
+    #     VITE_SIMULATOR_BACKEND_URL: ${VITE_SIMULATOR_BACKEND_URL:-http://localhost:9000}
+    #     VITE_SIMULATOR_DEBUG: ${VITE_SIMULATOR_DEBUG:-false}
+    networks:
+      - risc-v
+    ports:
+      - "8080:80"
+    environment:
+      TZ: "Europe/Berlin"
+    restart: unless-stopped
+
+  risc-v-simulation-server:
+    container_name: risc-v-simulation-server
+    hostname: risc-v-simulation-server
+    image: docker.io/gdnmhr/sysarch-riscv-simulation-server:2026
+    # build:
+    #   context: ./risc-v-simulation-server
+    networks:
+      - risc-v
+    ports:
+      - "9000:9000"
+    environment:
+      TZ: "Europe/Berlin"
+      CONFIG_PATH: /configs
+      CUSTOM_CONFIG_PATH: /custom-configs
+      SOURCE_FILE_ROOT: /programs
+      SUBMISSION_PATH: /submissions
+      CONTRIBUTIONS_PATH: /CONTRIBUTIONS.md
+    volumes:
+      - ./tasks:/configs
+      - ./custom-tasks:/custom-configs
+      - ./programs:/programs
+      - ./CONTRIBUTIONS.md:/CONTRIBUTIONS.md
+      - ./submissions:/submissions
+    restart: unless-stopped
+    
+  risc-v-processor:
+    container_name: risc-v-processor
+    hostname: risc-v-processor
+    image: docker.io/gdnmhr/sysarch-riscv-processor:2026
+    # build:
+    #   context: ./risc-v-processor
+    working_dir: /workspace/risc-v-processor
+    user: "0:0"
+    networks:
+      - risc-v
+    command:
+      - /home/ubuntu/.local/share/coursier/bin/sbt
+      - testOnly project3.operating_systems.InteractiveTester
+    environment:
+      TZ: "Europe/Berlin"
+      CORE_PATH: /verilog/MachineModeCore.sv
+      PLAY_HTTP_PORT: 9000
+      HOST: risc-v-simulation-server
+    volumes:
+      - ./risc-v-processor:/workspace/risc-v-processor
+      - ./MachineModeCore.v:/verilog/MachineModeCore.sv
+      - coursier-cache:/root/.cache/coursier
+      - ivy-cache:/root/.ivy2
+      - sbt-cache:/root/.sbt
+    restart: unless-stopped
+    
+networks:
+  risc-v:
+    driver: bridge
+
+volumes:
+  coursier-cache:
+  ivy-cache:
+  sbt-cache:

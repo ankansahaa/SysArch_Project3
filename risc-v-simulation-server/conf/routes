@@ -1,0 +1,41 @@
+# Routes
+
+# (All routes are prefixed with /api in production; during development
+#  the React Vite proxy rewrites /api -> http://localhost:9000)
+
+# WebSocket
+GET     /socket                     controllers.SimulatorController.socket
+
+# Ingest - called by the simulator process
+POST    /initial-state              controllers.SimulatorController.startSimulation
+POST    /current-state              controllers.SimulatorController.receiveCurrentState
+POST    /state-update               controllers.SimulatorController.receiveStateUpdate
+POST    /set-error                  controllers.SimulatorController.receiveError
+POST    /set-suspended              controllers.SimulatorController.receiveSuspended
+
+# Polling - called by the simulator process
+GET     /get-next-action            controllers.SimulatorController.getNextAction
+GET     /get-key                    controllers.SimulatorController.getKey
+GET     /get-config                 controllers.SimulatorController.getConfig
+
+# UI - called by the React frontend
++nocsrf
+POST    /new-action                 controllers.SimulatorController.postAction
++nocsrf
+POST    /new-key                    controllers.SimulatorController.postKey
++nocsrf
+POST    /set-config                 controllers.SimulatorController.setConfig
+GET     /get-current-state          controllers.SimulatorController.getCurrentState
+GET     /get-available-configs      controllers.SimulatorController.getAvailableConfigs
+GET     /get-available-custom-configs controllers.SimulatorController.getAvailableCustomConfigs
++nocsrf
+POST    /post-custom-config         controllers.SimulatorController.postCustomConfig
++nocsrf
+DELETE  /delete-custom-config/:id   controllers.SimulatorController.deleteCustomConfig(id: String)
+POST    /get-source-file            controllers.SimulatorController.getSourceFile
++nocsrf
+POST    /save-source-file           controllers.SimulatorController.saveSourceFile
+GET     /get-contributions          controllers.SimulatorController.getContributions
++nocsrf
+POST    /set-contributions          controllers.SimulatorController.setContributions
+GET     /get-submission             controllers.SimulatorController.getSubmission

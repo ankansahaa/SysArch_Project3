@@ -1,0 +1,7 @@
+.bloop
+.metals
+logs
+project
+target
+custom-configs/*.json
+programs/*
