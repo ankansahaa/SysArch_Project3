@@ -155,11 +155,18 @@ current_pcb_ready:
  beqz t1, next_pcb_ready
  li t2, 0x8100
 
-next_pcb_ready:
  # TODO: schedule next interrupt
- jal ra, set_next_timer
+next_pcb_ready:
+    jal ra, set_next_timer
 
- j dispatch_process
+    li t0, 0x7000
+    lw t1, 0(t0)
+
+    li t2, 0x8000
+    beqz t1, dispatch_process
+
+    li t2, 0x8100
+    j dispatch_process
 
 
 set_next_timer:
